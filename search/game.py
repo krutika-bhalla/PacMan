@@ -328,7 +328,7 @@ class Actions:
         dx, dy =  Actions._directions[direction]
         return (dx * speed, dy * speed)
     directionToVector = staticmethod(directionToVector)
-
+# Walls define
     def getPossibleActions(config, walls):
         possible = []
         x, y = config.pos
