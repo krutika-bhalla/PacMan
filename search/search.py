@@ -23,7 +23,6 @@ class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
     any of the methods (in object-oriented terminology: an abstract class).
-
     You do not need to change anything in this class, ever.
     """
 
@@ -36,7 +35,6 @@ class SearchProblem:
     def isGoalState(self, state):
         """
           state: Search state
-
         Returns True if and only if the state is a valid goal state.
         """
         util.raiseNotDefined()
@@ -44,7 +42,6 @@ class SearchProblem:
     def getSuccessors(self, state):
         """
           state: Search state
-
         For a given state, this should return a list of triples, (successor,
         action, stepCost), where 'successor' is a successor to the current
         state, 'action' is the action required to get there, and 'stepCost' is
@@ -55,7 +52,6 @@ class SearchProblem:
     def getCostOfActions(self, actions):
         """
          actions: A list of actions to take
-
         This method returns the total cost of a particular sequence of actions.
         The sequence must be composed of legal moves.
         """
@@ -75,41 +71,34 @@ def tinyMazeSearch(problem):
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
-
     Your search algorithm needs to return a list of actions that reaches the
     goal. Make sure to implement a graph search algorithm.
-
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
-
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
     
-    start_node = problem.getStartState()
-    
-    if problem.isGoalState(start_node):
-        return[]
-    
-    myStack = util.Stack()
+    starting_node = problem.getStartState()
+    c = problem.getStartState()
     visited_nodes = []
-    
-    myStack.push((start_node, []))
-    
-    while not myStack.isEmpty():
-        present_node, tasks = myStack.pop()
-        if present_node not in visited_nodes:
-            visited_nodes.append(present_node)
-            
-            if problem.isGoalState(present_node):
-                return tasks
-            
-            for successor_node, task, cost in problem.getSuccessors(present_node):
-                newTasks = tasks + [task]
-                myStack.push((successor_node, newTasks))
-    
+    visited_nodes.append(starting_node)
+    states = util.Stack()
+    state_tuple = (starting_node, [])
+    states.push(state_tuple)
+    while not states.isEmpty() and not problem.isGoalState(c):
+        state, actions = states.pop()
+        visited_nodes.append(state)
+        successor = problem.getSuccessors(state)
+        for i in successor:
+            neighbours = i[0]
+            if not neighbours in visited_nodes:
+                c = i[0]
+                path = i[1]
+                states.push((neighbours, actions + [path]))
+    return actions + [path]
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
