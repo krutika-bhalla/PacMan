@@ -92,12 +92,15 @@ def depthFirstSearch(problem):
         state, actions = states.pop()
         visited_nodes.append(state)
         successor = problem.getSuccessors(state)
+        # for cost in problem.getSuccessors(starting_node):
+        #     print(cost)
         for i in successor:
             neighbours = i[0]
             if not neighbours in visited_nodes:
                 c = i[0]
                 path = i[1]
                 states.push((neighbours, actions + [path]))
+    
     return actions + [path]
     util.raiseNotDefined()
 
@@ -129,6 +132,27 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    
+    starting_node = problem.getStartState()
+    visited_nodes = []
+    states = util.PriorityQueue()
+    states.push((starting_node, []) ,0)
+    while not states.isEmpty():
+        state, actions = states.pop()
+        if problem.isGoalState(state):
+            return actions
+        if state not in visited_nodes:
+            successors = problem.getSuccessors(state)
+            for i in successors:
+                neighbours = i[0]
+                if neighbours not in visited_nodes:
+                    path = i[1]
+                    newCost = actions + [path]
+                    states.push((neighbours, actions + [path]), problem.getCostOfActions(newCost))
+        visited_nodes.append(state)
+    
+    return actions
+    
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -141,6 +165,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    
+    starting_node = problem.getStartState()
+    visited_nodes = []
+    states = util.PriorityQueue()
+    states.push((starting_node, []), nullHeuristic(starting_node, problem))
+    nCost = 0
+    while not states.isEmpty():
+        state, actions = states.pop()
+        if problem.isGoalState(state):
+            return actions
+        if state not in visited_nodes:
+            successors = problem.getSuccessors(state)
+            for i in successors:
+                neighbours = i[0]
+                if neighbours not in visited_nodes:
+                    path = i[1]
+                    nActions = actions + [path]
+                    nCost = problem.getCostOfActions(nActions) + heuristic(neighbours, problem)
+                    states.push((neighbours, actions + [path]), nCost)
+        visited_nodes.append(state)
+    return actions
+    
     util.raiseNotDefined()
 
 
