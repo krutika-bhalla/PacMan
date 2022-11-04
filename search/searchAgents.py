@@ -288,6 +288,9 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.right = right
+        self.top = top
+        
 
     def getStartState(self):
         """
@@ -295,6 +298,9 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        all_corners = (False, False, False, False)
+        start = (self.startingPosition, all_corners)
+        return start
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -302,6 +308,9 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        corners = state[1]
+        boolean = corners[0] and corners[1] and corners[2] and corners[3]
+        return boolean
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -325,6 +334,28 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+            hold_corners = state[1]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hits_wall = self.walls[nextx][nexty]
+            new_corners = ()
+            next_state = (nextx, nexty)
+            if not hits_wall:
+                if next_state in self.corners:
+                    if next_state == (self.right, 1):
+                        new_corners = [True, hold_corners[1], hold_corners[2], hold_corners[3]]
+                    elif next_state == (self.right, self.top):
+                        new_corners = [hold_corners[0], True, hold_corners[2], hold_corners[3]]
+                    elif next_state == (1, self.top):
+                        new_corners = [hold_corners[0], hold_corners[1], True, hold_corners[3]]
+                    elif next_state == (1,1):
+                        new_corners = [hold_corners[0], hold_corners[1], hold_corners[2], True]
+                    successor = ((next_state, new_corners), action,  1)
+                else:
+                    successor = ((next_state, hold_corners), action, 1)
+                successors.append(successor)
+
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
