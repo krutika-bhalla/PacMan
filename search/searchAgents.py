@@ -288,7 +288,8 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.right = right
+        # defining your actions
+        self.right = right 
         self.top = top
         
 
@@ -298,6 +299,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        # location of 4 corners and starting position
         all_corners = (False, False, False, False)
         start = (self.startingPosition, all_corners)
         return start
@@ -309,7 +311,8 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         corners = state[1]
-        boolean = corners[0] and corners[1] and corners[2] and corners[3] # returns goal state for corners
+        # returns goal state for corners
+        boolean = corners[0] and corners[1] and corners[2] and corners[3] 
         return boolean
         util.raiseNotDefined()
 
@@ -356,7 +359,7 @@ class CornersProblem(search.SearchProblem):
                     successor = ((next_state, new_corners), action,  1) # adding valid states to the successor
                 else:
                     successor = ((next_state, hold_corners), action, 1) 
-                # appending to the successors to find the optimal path
+                # appending all the paths to successors to find the optimal path
                 successors.append(successor)
 
 
