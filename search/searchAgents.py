@@ -309,7 +309,7 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         corners = state[1]
-        boolean = corners[0] and corners[1] and corners[2] and corners[3]
+        boolean = corners[0] and corners[1] and corners[2] and corners[3] # returns goal state for corners
         return boolean
         util.raiseNotDefined()
 
@@ -334,6 +334,7 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            # Initializing the states and updating position for current state
             x,y = state[0]
             hold_corners = state[1]
             dx, dy = Actions.directionToVector(action)
@@ -341,6 +342,7 @@ class CornersProblem(search.SearchProblem):
             hits_wall = self.walls[nextx][nexty]
             new_corners = ()
             next_state = (nextx, nexty)
+            # condition for valid actions 
             if not hits_wall:
                 if next_state in self.corners:
                     if next_state == (self.right, 1):
@@ -351,9 +353,10 @@ class CornersProblem(search.SearchProblem):
                         new_corners = [hold_corners[0], hold_corners[1], True, hold_corners[3]]
                     elif next_state == (1,1):
                         new_corners = [hold_corners[0], hold_corners[1], hold_corners[2], True]
-                    successor = ((next_state, new_corners), action,  1)
+                    successor = ((next_state, new_corners), action,  1) # adding valid states to the successor
                 else:
-                    successor = ((next_state, hold_corners), action, 1)
+                    successor = ((next_state, hold_corners), action, 1) 
+                # appending to the successors to find the optimal path
                 successors.append(successor)
 
 
@@ -391,6 +394,7 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    # finding the states that are not the corners
     pos = state[0]
     state_corners = state[1]
     corners = problem.corners
@@ -410,6 +414,7 @@ def cornersHeuristic(state, problem):
             if not state_corners[0]:
                 corner_not.append(c)
 
+# finding the cost to the goal state (Manhattan Distance)
     cost = 0
     current_pos = pos
     while len(corner_not) > 0:
@@ -417,7 +422,7 @@ def cornersHeuristic(state, problem):
         x = 0
         for c in range(0, len(corner_not)):
             corner = corner_not[c]
-            x = x + 1
+            x = x+1
             dist = util.manhattanDistance(current_pos, corner)
             distArr.append(dist)
         minDist = min(distArr)
