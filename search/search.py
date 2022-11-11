@@ -152,7 +152,6 @@ def uniformCostSearch(problem):
         visited_nodes.append(state)
     
     return actions
-    
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):

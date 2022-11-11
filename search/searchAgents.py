@@ -448,7 +448,7 @@ class FoodSearchProblem:
     A search problem associated with finding the a path that collects all of the
     food (dots) in a Pacman game.
 
-    A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
+    A search state in this problem is a tuple ( pacmanPosition, food_grid ) where
       pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
       foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
     """
@@ -527,9 +527,35 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
+    pos, food_grid = state 
     "*** YOUR CODE HERE ***"
-    return 0
+    food_list = food_grid.asList()
+    if not food_list:
+        return 0
+    low = food_list[0]
+    if len(food_list) == 1:
+        return abs(pos[0] - low[0] + abs(pos[1] - low[1]))
+    newCost = 0
+    cost = 0
+    cost_arr = []
+    new_cost_arr = []
+    high = food_list[0]
+    lowCost = 0
+    for point in food_list:
+        cost = abs(pos[0] - point[0]) + abs(pos[1] - point[1])
+        cost_arr.append(cost)
+        lowCost = min(cost_arr)
+    minI = cost_arr.index(lowCost)
+    low = food_list[minI]
+    for point in food_list:
+        cost = abs(low[0] - point[0]) + abs(low[1] - point[1])
+        new_cost_arr.append(cost)
+        high_cost = max(new_cost_arr)
+    maxI = new_cost_arr.index(high_cost)
+    high = food_list[maxI]
+    return abs(low[0] - high[0]) + abs(low[1] - high[1]) + abs(pos[0] - low[0]) + abs(pos[1] - low[1])
+
+   # return 0
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -560,6 +586,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        return search.breadthFirstSearch(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -596,7 +623,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        x,y = state
+        return self.food[x][y]==True
 
 def mazeDistance(point1, point2, gameState):
     """
