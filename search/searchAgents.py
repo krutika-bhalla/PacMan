@@ -527,11 +527,16 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+    # For a Consistent Heuristic
+    # finding the minimum steps to reach the food
     pos, food_grid = state 
     "*** YOUR CODE HERE ***"
+    # initializing the food_list for finding the grids wherein the food is placed
     food_list = food_grid.asList()
     if not food_list:
         return 0
+    
+    # adding variables to define 'low' and 'high' for finding the cost to reach there.
     low = food_list[0]
     if len(food_list) == 1:
         return abs(pos[0] - low[0] + abs(pos[1] - low[1]))
@@ -541,15 +546,21 @@ def foodHeuristic(state, problem):
     new_cost_arr = []
     high = food_list[0]
     lowCost = 0
+    
+    # finding absolute value of the cost and appending it to cost_array 
     for point in food_list:
         cost = abs(pos[0] - point[0]) + abs(pos[1] - point[1])
         cost_arr.append(cost)
+    # recording the food spots with least cost in a separate array
         lowCost = min(cost_arr)
     minI = cost_arr.index(lowCost)
     low = food_list[minI]
+    
+    # keeping a track of food that has high cost
     for point in food_list:
         cost = abs(low[0] - point[0]) + abs(low[1] - point[1])
         new_cost_arr.append(cost)
+    # recording the food spots with max cost in a separate array
         high_cost = max(new_cost_arr)
     maxI = new_cost_arr.index(high_cost)
     high = food_list[maxI]
@@ -624,6 +635,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
 
         "*** YOUR CODE HERE ***"
         # util.raiseNotDefined()
+        
+        # finding the goal state for the pacman
         x,y = state
         return self.food[x][y]==True
 
